@@ -12,6 +12,8 @@ const RingCard = ({ card, rotateY, onMouseEnter, onMouseLeave }) => (
       lineHeight: 0,
       transformStyle: 'preserve-3d',
       transform: `rotateY(${rotateY}deg) translateZ(40vw)`,
+      padding: '0px',         // ← this creates the visual gap
+      boxSizing: 'border-box',
     }}
   >
     <img
@@ -22,5 +24,4 @@ const RingCard = ({ card, rotateY, onMouseEnter, onMouseLeave }) => (
     />
   </div>
 );
-
 export default RingCard;

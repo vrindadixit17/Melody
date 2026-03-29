@@ -1,4 +1,10 @@
-const LINK = { fontSize: 13, fontWeight: 700, color: '#000', textDecoration: 'none' };
+const LINK = {
+  fontSize: 13,
+  fontWeight: 600,
+  color: '#000',
+  textDecoration: 'none',
+  letterSpacing: '0.02em',
+};
 
 const Navbar = () => (
   <nav style={{
@@ -7,12 +13,15 @@ const Navbar = () => (
     padding: '20px 36px', background: '#fff',
   }}>
     <div style={{ display: 'flex', gap: 36 }}>
-      {['Frenzy Global', 'Frenzy Paris', 'Frenzy Films'].map(l => (
+      {['Discover', 'Charts', 'Artists'].map(l => (
         <a key={l} href="#" style={LINK}>{l}</a>
       ))}
     </div>
+    <div style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-0.03em' }}>
+      melody
+    </div>
     <div style={{ display: 'flex', gap: 36 }}>
-      {['Creatives', 'Archives', 'About'].map(l => (
+      {['Library', 'Premium', 'Sign in'].map(l => (
         <a key={l} href="#" style={LINK}>{l}</a>
       ))}
     </div>
