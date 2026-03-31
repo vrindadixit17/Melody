@@ -117,14 +117,15 @@ const SphereRing = () => {
         transformStyle: 'preserve-3d',
       }}>
         {CARDS.map((card, i) => (
-          <RingCard
-            key={i}
-            card={card}
-            rotateY={baseAngles[i] + rotation}
-            onMouseEnter={() => { pausedRef.current = true;  }}
-            onMouseLeave={() => { pausedRef.current = false; }}
-          />
-        ))}
+  <RingCard
+    key={i}
+    card={card}
+    radius={RADIUS_PX}
+    rotateY={baseAngles[i] + rotation}
+    onMouseEnter={() => { pausedRef.current = true;  }}
+    onMouseLeave={() => { pausedRef.current = false; }}
+  />
+))}
       </div>
     </div>
   );
