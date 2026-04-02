@@ -24,7 +24,7 @@ import img22 from '../assets/images/22.jpg';
 import img23 from '../assets/images/23.jpg';
 import img24 from '../assets/images/24.jpg';
 
-import Aurora from './components/Aurora';
+import Aurora from './Aurora';
 
 const ALL = [
   { src: img1,  title: 'Diamond Dogs',      artist: 'David Bowie'      },
@@ -76,25 +76,21 @@ const tiny = {
 };
 
 const glass = {
-  background: 'rgba(255,255,255,0.12)',
-  backdropFilter: 'blur(40px) saturate(200%) brightness(1.1)',
-  WebkitBackdropFilter: 'blur(40px) saturate(200%) brightness(1.1)',
-  border: '1px solid rgba(255,255,255,0.45)',
+  background: 'rgba(255,255,255,0.18)', 
+  backdropFilter: 'blur(30px)',
+  WebkitBackdropFilter: 'blur(30px)',
+  border: '1px solid rgba(255,255,255,0.4)',
   boxShadow: `
-    0 0 0 0.5px rgba(255,255,255,0.3),
-    0 8px 40px rgba(0,0,0,0.15),
-    0 2px 8px rgba(0,0,0,0.08),
-    inset 0 1.5px 0 rgba(255,255,255,1),
-    inset 0 -1px 0 rgba(255,255,255,0.15),
-    inset 1px 0 0 rgba(255,255,255,0.5),
-    inset -1px 0 0 rgba(255,255,255,0.5)
+    0 10px 40px rgba(0,0,0,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.6)
   `,
 };
 
 // ── LEFT PANEL ────────────────────────────────────────────────────────────────
 const LeftPanel = ({ onSelect, current }) => (
   <div style={{
-    width: '210px', flexShrink: 0,
+    width: '210px',
+    height: '500px', flexShrink: 0,
     borderRadius: C.radius,
     display: 'flex', flexDirection: 'column',
     overflow: 'hidden',
@@ -179,7 +175,7 @@ const CenterPanel = ({ onSelect }) => {
       <div style={{
         display: 'flex', alignItems: 'center', gap: '8px',
         background: 'rgba(0,0,0,0.05)',
-        borderRadius: '10px',
+        borderRadius: '100px',
         padding: '8px 12px',
         marginBottom: '16px',
         border: '1px solid rgba(0,0,0,0.06)',
@@ -258,7 +254,8 @@ const CenterPanel = ({ onSelect }) => {
 // ── RIGHT PANEL ───────────────────────────────────────────────────────────────
 const RightPanel = ({ current }) => (
   <div style={{
-    width: '250px', flexShrink: 0,
+    width: '250px',
+    height: '500px', flexShrink: 0,
     borderRadius: C.radius,
     display: 'flex', flexDirection: 'column',
     overflow: 'hidden',
@@ -353,7 +350,7 @@ const Home = ({ onSelect, current }) => (
     display: 'flex', flexDirection: 'row',
     height: '100%', width: '100%',
     fontFamily: "'Plus Jakarta Sans', sans-serif",
-    background: '#0a0a0f',
+    background: '#fff',
     padding: C.gap,
     gap: C.gap,
     boxSizing: 'border-box',
@@ -364,14 +361,11 @@ const Home = ({ onSelect, current }) => (
     {/* Aurora background — absolutely fills the whole panel */}
     <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
       <Aurora
-        color1='#7c3aed'
-        color2='#db2777'
-        brightness={1.3}
-        speed={0.5}
-        bandHeight={0.5}
-        bandSpread={1.2}
-        scale={1.5}
-      />
+  color1="#ffffff"
+  color2="#c4b5fd"
+  brightness={2.2}   // 🔥 increase
+  scale={2.5}
+/>
     </div>
 
     {/* Panels sit above aurora */}
