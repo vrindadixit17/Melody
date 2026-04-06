@@ -55,8 +55,6 @@ const ALL = [
 const RECENTLY_PLAYED = ALL.slice(0, 8);
 const PICKED          = ALL.slice(8, 24);
 
-// Grid layout — 5 cols x 5 rows = 25 cells, some empty, some filled
-// null = empty cell, number = index into PICKED
 const GRID = [
   0,    1,    2,    3,    null,
   null, 4,    5,    6,    7,
@@ -72,7 +70,6 @@ const C = {
   gap:    '6px',
 };
 
-// Color extractor
 const useImageColors = () => useCallback((src, onColors) => {
   const img = new Image();
   img.crossOrigin = 'anonymous';
@@ -111,8 +108,6 @@ const LeftPanel = ({ onSelect, current, query, setQuery }) => (
     display: 'flex', flexDirection: 'column',
     overflow: 'hidden',
   }}>
-
-    {/* RECENTLY PLAYED — two separate blocks, tight spacing */}
     <div style={{ padding: '18px 18px 14px', flexShrink: 0 }}>
       <p style={{ margin: 0, fontWeight: 600, fontSize: '28px', letterSpacing: '-1px', lineHeight: 1, color: C.text, textTransform: 'uppercase' }}>
         Recently
@@ -120,8 +115,6 @@ const LeftPanel = ({ onSelect, current, query, setQuery }) => (
       <p style={{ margin: 0, fontWeight: 600, fontSize: '28px', letterSpacing: '-1px', lineHeight: 1, color: C.text, textTransform: 'uppercase' }}>
         Played
       </p>
-
-      {/* Search bar below header */}
       <div style={{
         display: 'flex', alignItems: 'center', gap: '6px',
         background: 'rgba(255,255,255,0.7)',
@@ -142,11 +135,12 @@ const LeftPanel = ({ onSelect, current, query, setQuery }) => (
             color: C.text,
           }}
         />
-        {query && <span onClick={() => setQuery('')} style={{ fontSize: '10px', color: C.muted, cursor: 'pointer' }}>✕</span>}
+        {query && (
+          <span onClick={() => setQuery('')} style={{ fontSize: '10px', color: C.muted, cursor: 'pointer' }}>✕</span>
+        )}
       </div>
     </div>
 
-    {/* List */}
     <div style={{ flex: 1, overflowY: 'auto', scrollbarWidth: 'none' }}>
       {RECENTLY_PLAYED.map((item, i) => {
         const active = current?.title === item.title;
@@ -187,9 +181,8 @@ const CenterPanel = ({ onSelect, query }) => {
       item.artist.toLowerCase().includes(query.toLowerCase())
   );
 
-  // Build grid — map PICKED indices to filtered or null
   const grid = query
-    ? filtered.slice(0, 25).map((item, i) => ({ type: 'img', item }))
+    ? filtered.slice(0, 25).map(item => ({ type: 'img', item }))
     : GRID.map(cell => {
         if (cell === null) return { type: 'empty' };
         if (cell === 'txt') return { type: 'txt' };
@@ -199,11 +192,13 @@ const CenterPanel = ({ onSelect, query }) => {
   return (
     <div style={{
       flex: 1,
+      height: '500px',
       display: 'grid',
       gridTemplateColumns: 'repeat(5, 1fr)',
       gridTemplateRows: 'repeat(5, 1fr)',
-      gap: '6px',
+      gap: '5px',
       overflow: 'hidden',
+      padding: '0 4px',
     }}>
       {grid.map((cell, i) => {
         if (cell.type === 'empty') return <div key={i} />;
@@ -211,10 +206,9 @@ const CenterPanel = ({ onSelect, query }) => {
         if (cell.type === 'txt') return (
           <div key={i} style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            padding: '8px',
           }}>
             <p style={{
-              fontWeight: 600, fontSize: '20px', color: C.text,
+              fontWeight: 600, fontSize: '16px', color: C.text,
               textTransform: 'uppercase', letterSpacing: '-0.5px',
               lineHeight: 1.2, textAlign: 'center', margin: 0,
             }}>
@@ -228,8 +222,7 @@ const CenterPanel = ({ onSelect, query }) => {
             key={i}
             onClick={() => onSelect(cell.item)}
             style={{
-              borderRadius: '8px', overflow: 'hidden', cursor: 'pointer',
-              aspectRatio: '1',
+              borderRadius: '6px', overflow: 'hidden', cursor: 'pointer',
               transition: 'transform 0.2s ease, box-shadow 0.2s ease',
               boxShadow: '0 2px 8px rgba(36,36,36,0.1)',
             }}
@@ -263,7 +256,6 @@ const RightPanel = ({ current, accentColor }) => (
     display: 'flex', flexDirection: 'column',
     overflow: 'hidden',
   }}>
-    {/* NOW PLAYING — two tight blocks */}
     <div style={{ padding: '18px 18px 12px', flexShrink: 0 }}>
       <p style={{ margin: 0, fontWeight: 600, fontSize: '28px', letterSpacing: '-1px', lineHeight: 1, color: C.text, textTransform: 'uppercase' }}>
         Now
@@ -275,28 +267,22 @@ const RightPanel = ({ current, accentColor }) => (
 
     {current ? (
       <div style={{ flex: 1, overflowY: 'auto', scrollbarWidth: 'none', padding: '0 18px 18px' }}>
-
-        {/* Track no + add */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
           <span style={{ fontWeight: 600, fontSize: '14px', color: C.text }}>01.</span>
           <span style={{ fontSize: '18px', color: C.muted, cursor: 'pointer', lineHeight: 1 }}>⊕</span>
         </div>
 
         {/* Album art + disc */}
-        <div style={{ position: 'relative', marginBottom: '14px' }}>
-          {/* Disc — same size as album, peeking right, slightly behind */}
+        <div style={{ position: 'relative', marginBottom: '14px', height: '168px' }}>
           <div style={{
             position: 'absolute',
-            top: '8px',
-            left: '155px',           // album is 160px wide, disc peeks out
-            width: '160px',
-            height: '160px',
+            top: '0px', left: '110px',
+            width: '160px', height: '160px',
             borderRadius: '50%',
             background: 'radial-gradient(circle at center, #555 12%, #242424 12%, #242424 28%, #3a3a3a 28%, #3a3a3a 30%, #242424 30%, #242424 46%, #3a3a3a 46%, #3a3a3a 48%, #242424 48%)',
             boxShadow: '0 4px 20px rgba(36,36,36,0.35)',
             zIndex: 0,
           }} />
-          {/* Album — slightly tilted */}
           <img src={current.src} alt={current.title}
             style={{
               width: '160px', height: '160px', objectFit: 'cover',
@@ -321,12 +307,12 @@ const RightPanel = ({ current, accentColor }) => (
           <span style={{ fontSize: '13px', color: C.muted, cursor: 'pointer', marginLeft: '8px', flexShrink: 0 }}>···</span>
         </div>
 
-        {/* Lyrics Preview — accent color */}
+        {/* Lyrics Preview */}
         <div style={{
           borderRadius: '10px',
           background: accentColor,
           padding: '14px 16px', cursor: 'pointer', marginBottom: '8px',
-          transition: 'transform 0.2s ease, filter 0.2s ease',
+          transition: 'filter 0.2s ease',
         }}
           onMouseEnter={e => e.currentTarget.style.filter = 'brightness(1.1)'}
           onMouseLeave={e => e.currentTarget.style.filter = 'brightness(1)'}
@@ -370,7 +356,7 @@ const Home = ({ onSelect, current }) => {
   const [auroraColor1, setAuroraColor1] = useState('#f7f7f7');
   const [auroraColor2, setAuroraColor2] = useState('#e100ff');
   const [accentColor,  setAccentColor]  = useState('#e8174a');
-  const [query, setQuery] = useState('');
+  const [query,        setQuery]        = useState('');
   const getColors = useImageColors();
 
   const handleSelect = useCallback((item) => {
@@ -378,18 +364,15 @@ const Home = ({ onSelect, current }) => {
     getColors(item.src, (c1, c2) => {
       setAuroraColor1(c1);
       setAuroraColor2(c2);
-      setAccentColor(c1); // dominant color for lyrics preview
+      setAccentColor(c1);
     });
   }, [onSelect, getColors]);
 
   return (
     <div style={{
-      display: 'flex', flexDirection: 'row',
-      alignItems: 'flex-start',
-      height: '100%', width: '100%',
+      width: '100%', height: '100%',
       fontFamily: "'Plus Jakarta Sans', sans-serif",
       background: '#ffffff',
-      padding: C.gap, gap: C.gap,
       boxSizing: 'border-box',
       overflow: 'hidden',
       position: 'relative',
@@ -414,16 +397,18 @@ const Home = ({ onSelect, current }) => {
         />
       </div>
 
-      {/* Panels */}
+      {/* Panels row */}
       <div style={{
         position: 'relative', zIndex: 1,
         display: 'flex', flexDirection: 'row',
+        alignItems: 'flex-start',
         width: '100%', height: '100%',
-        gap: C.gap, alignItems: 'flex-start',
+        padding: C.gap, gap: C.gap,
+        boxSizing: 'border-box',
       }}>
-        <LeftPanel  onSelect={handleSelect} current={current} query={query} setQuery={setQuery} />
+        <LeftPanel   onSelect={handleSelect} current={current} query={query} setQuery={setQuery} />
         <CenterPanel onSelect={handleSelect} query={query} />
-        <RightPanel current={current} accentColor={accentColor} />
+        <RightPanel  current={current} accentColor={accentColor} />
       </div>
     </div>
   );
