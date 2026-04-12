@@ -95,31 +95,7 @@ const useImageColors = () => useCallback((src, onColors) => {
     );
   };
 }, []);
-// At the top of the panels row div in Home, add a back button:
-<div style={{
-  position: 'absolute', top: '14px', right: '14px', zIndex: 20,
-}}>
-  <button
-    onClick={onBack}
-    style={{
-      fontSize: '12px', fontWeight: 600,
-      cursor: 'pointer',
-      background: 'rgba(255,255,255,0.6)',
-      backdropFilter: 'blur(8px)',
-      WebkitBackdropFilter: 'blur(8px)',
-      color: '#242424',
-      border: '1px solid rgba(255,255,255,0.7)',
-      borderRadius: '50px',
-      padding: '6px 14px',
-      fontFamily: "'Plus Jakarta Sans', sans-serif",
-      transition: 'background 0.2s',
-    }}
-    onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.9)'}
-    onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.6)'}
-  >
-    ← Back
-  </button>
-</div>
+
 // ── LEFT PANEL ────────────────────────────────────────────────────────────────
 const LeftPanel = ({ onSelect, current, query, setQuery }) => (
   <div style={{
@@ -376,7 +352,7 @@ const RightPanel = ({ current, accentColor }) => (
 );
 
 // ── HOME ──────────────────────────────────────────────────────────────────────
-const Home = ({ onSelect, current, onBack }) => {
+const Home = ({ onSelect, current }) => {
   const [auroraColor1, setAuroraColor1] = useState('#f7f7f7');
   const [auroraColor2, setAuroraColor2] = useState('#e100ff');
   const [accentColor,  setAccentColor]  = useState('#e8174a');
