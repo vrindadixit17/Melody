@@ -24,8 +24,6 @@ import img21 from '../assets/images/21.jpg';
 import img22 from '../assets/images/22.jpg';
 import img23 from '../assets/images/23.jpg';
 import img24 from '../assets/images/24.jpg';
-import img25 from '../assets/images/25.jpg';
-import img26 from '../assets/images/26.jpg';
 
 const ALL = [
   { src: img1,  title: 'Diamond Dogs',      artist: 'David Bowie',      lyrics: 'Putting out fire with gasoline...'        },
@@ -52,13 +50,10 @@ const ALL = [
   { src: img22, title: 'Positions',         artist: 'Ariana Grande',     lyrics: 'Switching positions for you...'          },
   { src: img23, title: 'Future Nostalgia',  artist: 'Dua Lipa',          lyrics: 'I know you ain\'t used to a female alpha...' },
   { src: img24, title: 'Chromatica',        artist: 'Lady Gaga',         lyrics: 'I\'ll never talk again, oh boy...'       },
-  { src: img25, title: 'Your Title', artist: 'Your Artist', lyrics: 'Your lyrics...' },
-{ src: img26, title: 'Your Title', artist: 'Your Artist', lyrics: 'Your lyrics...' },
 ];
 
 const RECENTLY_PLAYED = ALL.slice(0, 8);
 const PICKED          = ALL.slice(8, 24);
-
 
 const GRID = [
   0,    null, 1,    2,    null, 3,
@@ -104,8 +99,6 @@ const useImageColors = () => useCallback((src, onColors) => {
 
 // ── LEFT PANEL ────────────────────────────────────────────────────────────────
 const LeftPanel = ({ onSelect, current, query, setQuery }) => {
-  // Fit 8 items without scroll — calculate item height
-  // 500px total, header ~110px, leaves ~390px for 8 items = ~48px each
   return (
     <div style={{
       width: '220px', height: '500px', flexShrink: 0,
@@ -121,7 +114,6 @@ const LeftPanel = ({ onSelect, current, query, setQuery }) => {
       <div style={{ padding: '16px 16px 10px', flexShrink: 0 }}>
         <p style={{ margin: 0, fontWeight: 600, fontSize: '26px', letterSpacing: '-1px', lineHeight: 1, color: C.text, textTransform: 'uppercase' }}>Recently</p>
         <p style={{ margin: 0, fontWeight: 600, fontSize: '26px', letterSpacing: '-1px', lineHeight: 1, color: C.text, textTransform: 'uppercase' }}>Played</p>
-        {/* Search */}
         <div style={{
           display: 'flex', alignItems: 'center', gap: '6px',
           background: 'rgba(255,255,255,0.8)',
@@ -138,7 +130,7 @@ const LeftPanel = ({ onSelect, current, query, setQuery }) => {
         </div>
       </div>
 
-      {/* List — no scroll, items sized to fit */}
+      {/* List */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '0 8px 10px' }}>
         {RECENTLY_PLAYED.map((item, i) => {
           const active = current?.title === item.title;
@@ -181,7 +173,7 @@ const CenterPanel = ({ onSelect, query }) => {
   );
 
   const grid = query
-    ? [...filtered.slice(0, 20).map(item => ({ type: 'img', item })), ...Array(5).fill({ type: 'empty' })]
+    ? [...filtered.slice(0, 36).map(item => ({ type: 'img', item })), ...Array(36).fill({ type: 'empty' })].slice(0, 36)
     : GRID.map(cell => {
         if (cell === null) return { type: 'empty' };
         if (cell === 'txt') return { type: 'txt' };
@@ -190,19 +182,31 @@ const CenterPanel = ({ onSelect, query }) => {
 
   return (
     <div style={{
-      flex: 1, height: '500px',
+      flex: 1,
+      height: '500px',
+      maxHeight: '500px',
       display: 'grid',
       gridTemplateColumns: 'repeat(6, 1fr)',
-      gridTemplateRows: 'repeat(6, 1fr)',
+      gridAutoRows: '1fr',
+      aspectRatio: '1 / 1',
       gap: '5px',
       overflow: 'hidden',
     }}>
       {grid.map((cell, i) => {
-        if (cell.type === 'empty') return <div key={i} style={{ aspectRatio: '1' }} />;
+        if (cell.type === 'empty') return (
+          <div key={i} style={{ width: '100%', height: '100%', minWidth: 0, minHeight: 0 }} />
+        );
 
         if (cell.type === 'txt') return (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', aspectRatio: '1' }}>
-            <p style={{ fontWeight: 600, fontSize: '15px', color: C.text, textTransform: 'uppercase', letterSpacing: '-0.5px', lineHeight: 1.2, textAlign: 'center', margin: 0 }}>
+          <div key={i} style={{
+            width: '100%', height: '100%', minWidth: 0, minHeight: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <p style={{
+              fontWeight: 600, fontSize: '13px', color: C.text,
+              textTransform: 'uppercase', letterSpacing: '-0.5px',
+              lineHeight: 1.2, textAlign: 'center', margin: 0,
+            }}>
               Picked<br />for you ♡
             </p>
           </div>
@@ -210,19 +214,35 @@ const CenterPanel = ({ onSelect, query }) => {
 
         return (
           <div
-            key={i} onClick={() => onSelect(cell.item)}
+            key={i}
+            onClick={() => onSelect(cell.item)}
             style={{
-              aspectRatio: '1 / 1',
-              borderRadius: '6px', overflow: 'hidden', cursor: 'pointer',
-              minWidth: 0, minHeight: 0,
+              width: '100%',
+              height: '100%',
+              minWidth: 0,
+              minHeight: 0,
+              borderRadius: '6px',
+              overflow: 'hidden',
+              cursor: 'pointer',
+              aspectRatio: '1 / 1', 
               transition: 'transform 0.2s ease, box-shadow 0.2s ease',
               boxShadow: '0 2px 8px rgba(36,36,36,0.1)',
             }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.boxShadow = '0 8px 20px rgba(36,36,36,0.2)'; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(36,36,36,0.1)'; }}
+            onMouseEnter={e => {
+              e.currentTarget.style.transform = 'scale(1.05)';
+              e.currentTarget.style.boxShadow = '0 8px 20px rgba(36,36,36,0.2)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(36,36,36,0.1)';
+            }}
           >
-            <img src={cell.item.src} alt={cell.item.title} draggable={false}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            <img
+              src={cell.item.src}
+              alt={cell.item.title}
+              draggable={false}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
           </div>
         );
       })}
@@ -242,7 +262,6 @@ const RightPanel = ({ current, accentColor }) => (
     display: 'flex', flexDirection: 'column',
     overflow: 'hidden',
   }}>
-    {/* Header */}
     <div style={{ padding: '16px 20px 10px', flexShrink: 0 }}>
       <p style={{ margin: 0, fontWeight: 600, fontSize: '26px', letterSpacing: '-1px', lineHeight: 1, color: C.text, textTransform: 'uppercase' }}>Now</p>
       <p style={{ margin: 0, fontWeight: 600, fontSize: '26px', letterSpacing: '-1px', lineHeight: 1, color: C.text, textTransform: 'uppercase' }}>Playing</p>
@@ -250,16 +269,12 @@ const RightPanel = ({ current, accentColor }) => (
 
     {current ? (
       <div style={{ flex: 1, overflow: 'hidden', padding: '0 20px 16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-
-        {/* Track no + add */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ fontWeight: 600, fontSize: '13px', color: C.text }}>01.</span>
           <span style={{ fontSize: '16px', color: C.muted, cursor: 'pointer' }}>⊕</span>
         </div>
 
-        {/* Album art + disc — disc fully behind, not clipped */}
         <div style={{ position: 'relative', height: '150px', flexShrink: 0 }}>
-          {/* Disc — same 150px, centered behind album, shifted right */}
           <div style={{
             position: 'absolute',
             top: '0px', left: '90px',
@@ -269,7 +284,6 @@ const RightPanel = ({ current, accentColor }) => (
             boxShadow: '0 6px 24px rgba(36,36,36,0.4)',
             zIndex: 0,
           }} />
-          {/* Album — tilted, sits in front */}
           <img src={current.src} alt={current.title}
             style={{
               width: '150px', height: '150px', objectFit: 'cover',
@@ -282,7 +296,6 @@ const RightPanel = ({ current, accentColor }) => (
             }} />
         </div>
 
-        {/* Title + dots */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div style={{ overflow: 'hidden', flex: 1 }}>
             <p style={{ fontWeight: 600, fontSize: '13px', color: C.text, margin: 0, textTransform: 'uppercase', letterSpacing: '-0.3px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -295,7 +308,6 @@ const RightPanel = ({ current, accentColor }) => (
           <span style={{ fontSize: '12px', color: C.muted, cursor: 'pointer', marginLeft: '8px', flexShrink: 0 }}>···</span>
         </div>
 
-        {/* Lyrics Preview — accent color + actual lyrics */}
         <div style={{
           borderRadius: '8px',
           background: accentColor,
@@ -314,7 +326,6 @@ const RightPanel = ({ current, accentColor }) => (
           </p>
         </div>
 
-        {/* About Artist */}
         <div style={{
           borderRadius: '8px', background: '#242424',
           padding: '10px 12px', display: 'flex', gap: '10px', alignItems: 'center',
@@ -370,7 +381,6 @@ const Home = ({ onSelect, current, onBack }) => {
       overflow: 'hidden',
       position: 'relative',
     }}>
-      {/* Aurora bg */}
       <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
         <Aurora
           color1={auroraColor1} color2={auroraColor2}
@@ -383,7 +393,6 @@ const Home = ({ onSelect, current, onBack }) => {
         />
       </div>
 
-      {/* Panels */}
       <div style={{
         position: 'relative', zIndex: 1,
         display: 'flex', flexDirection: 'row',
