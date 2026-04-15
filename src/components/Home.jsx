@@ -59,14 +59,14 @@ const ALL = [
 const RECENTLY_PLAYED = ALL.slice(0, 8);
 const PICKED          = ALL.slice(8, 24);
 
-// 5x5 grid with random-looking placement and empty gaps
+
 const GRID = [
   0,    null, 1,    2,    null, 3,
   null, 4,    null, 5,    6,    null,
   7,    'txt',8,    null, 9,    10,
   null, 11,   12,   null, 13,   null,
-  14,   null, null, 15,   null, 16,
-  null, 17,   null, null, null, null,
+  14,   null, null, 15,   null, null,
+  null, null, null, null, null, null,
 ];
 
 const C = {
